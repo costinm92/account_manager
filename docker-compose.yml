@@ -1,0 +1,26 @@
+version: '3.4'
+services:
+  mariadb:
+    image: mariadb/server:10.4
+    ports:
+      - 3306:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: manager
+      MYSQL_USER: manager
+      MYSQL_PASSWORD: password
+    networks:
+      - backend
+    restart: on-failure
+    volumes:
+      - manager_db:/var/lib/mysql
+
+volumes:
+  manager_db:
+    external: true
+
+networks:
+  frontend:
+    driver: bridge
+  backend:
+    driver: bridge

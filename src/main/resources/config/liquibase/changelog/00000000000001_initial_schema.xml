@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet author="madalin.costin" id="00000000000001-1">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="addresses"/>
+            </not>
+        </preConditions>
+        <createTable tableName="addresses">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="street" type="VARCHAR(255)"/>
+            <column name="house_number" type="VARCHAR(255)"/>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="ENGINE=MyISAM"/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet author="madalin.costin" id="00000000000001-2">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <tableExists tableName="accounts"/>
+            </not>
+        </preConditions>
+        <createTable tableName="accounts">
+            <column name="id" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="name" type="VARCHAR(255)"/>
+            <column name="primary_contact_name" type="VARCHAR(255)"/>
+            <column name="email_address" type="VARCHAR(255)"/>
+            <column name="address_id" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="created_at" type="date"/>
+            <column name="updated_at" type="date"/>
+        </createTable>
+        <modifySql dbms="mysql">
+            <append value="ENGINE=MyISAM"/>
+        </modifySql>
+    </changeSet>
+
+    <changeSet author="madalin.costin" id="00000000000001-3">
+        <addForeignKeyConstraint baseTableName="accounts"
+                                 baseColumnNames="address_id"
+                                 constraintName="fk_accounts_address_id"
+                                 referencedTableName="addresses"
+                                 referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>
